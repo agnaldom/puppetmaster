@@ -347,11 +347,11 @@ O puppetmaster uma vez instalado vai criar alguns arquivos e diretórios no /etc
 ### arquivos e diretórios master
 
 Ao instalar você verá o seguinte conteúdo no diretório /etc/puppet
-<p>
+
 puppetmater:/etc/puppet# ls -lah
 total 40K
-<code>drwxr-xr-x  5 root root 4.0K May 15 16:27 .
-drwxr-xr-x 70 root root 4.0K May 15 16:25 ..
+> drwxr-xr-x  5 root root 4.0K May 15 16:27 .
+> drwxr-xr-x 70 root root 4.0K May 15 16:25 ..
 -rw-r--r--  1 root root 2.5K Apr 10 15:23 auth.conf
 -rw-r--r--  1 root root  459 Apr 11 00:19 fileserver.conf
 drwxr-xr-x  2 root root 4.0K Apr  5 13:01 manifests
@@ -359,7 +359,6 @@ drwxr-xr-x  2 root root 4.0K Apr  5 13:01 modules
 -rw-r--r--  1 root root  462 Apr 11 00:19 puppet.conf
 drwxr-xr-x  2 root root 4.0K Apr  5 13:01 templates</code>
 
-</p>
 
 ### arquivo auth.conf
 
