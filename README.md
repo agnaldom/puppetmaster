@@ -351,7 +351,7 @@ Ao instalar você verá o seguinte conteúdo no diretório /etc/puppet
 puppetmater:/etc/puppet# ls -lah
 total 40K
 > drwxr-xr-x  5 root root 4.0K May 15 16:27 .
-> drwxr-xr-x 70 root root 4.0K May 15 16:25 ..
+drwxr-xr-x 70 root root 4.0K May 15 16:25 ..
 -rw-r--r--  1 root root 2.5K Apr 10 15:23 auth.conf
 -rw-r--r--  1 root root  459 Apr 11 00:19 fileserver.conf
 drwxr-xr-x  2 root root 4.0K Apr  5 13:01 manifests
@@ -462,3 +462,82 @@ Exiting; no certificate found and waitforcert is disabled
 observe que ao rodar o agent ele gerou um certificado digital e depois gerou uma requisição de assinatura do certificado e parou por ali pois ainda não está devidamente autorizado a utilizar recursos do puppetmaster.
 
 é importante ressaltar que ele só gerou essa saída pois encontrou o servidor puppet graças ao ajuste no /etc/hosts, portanto fique atento as configurações de DNS ou do HOSTS.
+
+
+## certificados
+
+
+a comunicação entre agente e master (cliente/servidor) é feita por uma relação de confiança estabelecida através de certificado digital, nenhum servidor com puppetagent pode utilizar os recursos do servidor puppetmaster se este não for explicitamente autorizado.
+
+a autorização funciona da seguinte forma:
+
+* ao rodar o agente pela primeira vez em um servidor com puppetagent este vai gerar uma certificado e uma requisição de assinatura de certificado.
+1. esta requisição será enviada para o servidor puppetmaster, lá deveremos verificar quais as requisições de assinatura de certificado estão pendentes, e se for o cas  o, assiná-las.
+2. a partir do momento que forem assinadas o servidor puppetagent estará apto a se comunicar com o servidor puppetmaster, estando então devidamente autorizado a buscar seu 'catálogo' de configurações.
+3. no servidor puppetmaster - por sua vez, você poderá declarar as configurações para o servidor com o puppetagent.
+
+###assinando certificados
+
+para verificar certificados com pendência de assinaturas rode o comando abaixo no puppetmaster
+
+root@puppetmaster:~# puppet cert --list
+"puppetagent.hacklab" (D6:17:3E:B6:D9:43:DB:08:F7:F1:53:38:3B:A9:21:49)  
+se este for um servidor legítimo, autorizado a utilizar o puppetmaster, assine o certificado com o comando:
+
+root@puppetmaster:~# puppet cert --sign puppetagent.hacklab
+notice: Signed certificate request for puppetagent.hacklab
+para verificar todos servidores com puppetagent devidamente autorizados rode o comando:
+
+root@puppetmaster:~# puppet cert --list --all
++ "puppetagent.hacklab"  (E9:17:9E:AD:ED:0E:4F:90:9D:6E:A9:46:A1:C6:59:07)
++ "puppetmaster.hacklab" (80:A0:C1:89:3B:26:A8:45:F6:12:8D:39:70:E9:C1:D9)
+para remover a autorização de um servidor rode
+
+puppet:/etc/puppet/manifests# puppet cert --clean nomedoservidor
+conferindo resultado
+
+após assinar o certificado, autorizando o puppetagent a utilizar o puppetmaster, vamos rodar novamente o comando e avaliar a saída
+
+root@puppetagent:~# puppet agent --test
+saída
+
+info: Caching catalog for puppetagent.hacklab
+info: Applying configuration version '1347304611'
+notice: Finished catalog run in 0.11 seconds
+perceba que agora ele conseguiu se comunicar com o servidor perfeitamente, apesar de não ter feito muita coisa, ainda, afinal ainda não declaramos nenhum tipo de configuração para o servidor puppetagent.
+
+vale lembrar que além do controle de quem pode ou não usar os recursos do puppetmaster, o certificado também serve para estabelecer uma conexão segura (SSL) entre puppetagent e puppetmaster, protegendo assim toda a comunicação que ocorre entre eles.para verificar certificados com pendência de assinaturas rode o comando abaixo no puppetmaster
+
+>root@puppetmaster:~# puppet cert --list
+"puppetagent.hacklab" (D6:17:3E:B6:D9:43:DB:08:F7:F1:53:38:3B:A9:21:49)  
+
+se este for um servidor legítimo, autorizado a utilizar o puppetmaster, assine o certificado com o comando:
+
+>root@puppetmaster:~# puppet cert --sign puppetagent.hacklab
+notice: Signed certificate request for puppetagent.hacklab
+
+para verificar todos servidores com puppetagent devidamente autorizados rode o comando:
+
+>root@puppetmaster:~# puppet cert --list --all
++ "puppetagent.hacklab"  (E9:17:9E:AD:ED:0E:4F:90:9D:6E:A9:46:A1:C6:59:07)
++ "puppetmaster.hacklab" (80:A0:C1:89:3B:26:A8:45:F6:12:8D:39:70:E9:C1:D9)
+
+para remover a autorização de um servidor rode
+
+>puppet:/etc/puppet/manifests# puppet cert --clean nomedoservidor
+
+###conferindo resultado
+
+após assinar o certificado, autorizando o puppetagent a utilizar o puppetmaster, vamos rodar novamente o comando e avaliar a saída
+
+>root@puppetagent:~# puppet agent --test
+
+saída
+
+>info: Caching catalog for puppetagent.hacklab
+info: Applying configuration version '1347304611'
+notice: Finished catalog run in 0.11 seconds
+
+perceba que agora ele conseguiu se comunicar com o servidor perfeitamente, apesar de não ter feito muita coisa, ainda, afinal ainda não declaramos nenhum tipo de configuração para o servidor puppetagent.
+
+vale lembrar que além do controle de quem pode ou não usar os recursos do puppetmaster, o certificado também serve para estabelecer uma conexão segura (SSL) entre puppetagent e puppetmaster, protegendo assim toda a comunicação que ocorre entre eles.     
