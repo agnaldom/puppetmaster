@@ -61,4 +61,40 @@ A aplicação das configurações no modo cliente/servidor segue os seguinte pas
 ** Agente aplica configurações do catálogo - se houver (enforce)
 ** Agente comunica seu estado ao nó master após aplicação do catálogo
 *** Sistema reflete as configurações que foram declaradas para ele
-  
+
+##Configurando
+
+### hostname e dominio
+
+É muito importante que nas duas vms você esteja com o hostname devidamente configurado, ao se logar faça o seguinte:
+
+### puppetmaster
+vamos também configurar o arquivo hostname
+
+echo puppetmaster > /etc/puppet/hostname
+
+e não se esqueça do mais importante, arquivo /etc/hosts
+
+echo 10.15.10.81 puppetmaster puppetmaster puppet >> /etc/hosts
+
+### puppetagent
+vamos também configurar o arquivo hostname
+
+echo puppetagent > /etc/hostname
+
+e não se esqueça do mais importante, arquivo /etc/hosts
+
+echo 10.15.10.81 puppetagent puppetagent agent >> /etc/hosts
+
+
+## puppetmaster
+### instalando o masterinstalando o master
+
+ aptitude install puppetmaster
+
+
+ ### verificando portas
+
+verifique se a porta 8140 está aberta
+
+$ netstat -ntpl|grep 8140
