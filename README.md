@@ -347,19 +347,19 @@ O puppetmaster uma vez instalado vai criar alguns arquivos e diretórios no /etc
 ### arquivos e diretórios master
 
 Ao instalar você verá o seguinte conteúdo no diretório /etc/puppet
-
+<p>
 puppetmater:/etc/puppet# ls -lah
 total 40K
-drwxr-xr-x  5 root root 4.0K May 15 16:27 .
+<code>drwxr-xr-x  5 root root 4.0K May 15 16:27 .
 drwxr-xr-x 70 root root 4.0K May 15 16:25 ..
 -rw-r--r--  1 root root 2.5K Apr 10 15:23 auth.conf
 -rw-r--r--  1 root root  459 Apr 11 00:19 fileserver.conf
 drwxr-xr-x  2 root root 4.0K Apr  5 13:01 manifests
 drwxr-xr-x  2 root root 4.0K Apr  5 13:01 modules
 -rw-r--r--  1 root root  462 Apr 11 00:19 puppet.conf
-drwxr-xr-x  2 root root 4.0K Apr  5 13:01 templates
+drwxr-xr-x  2 root root 4.0K Apr  5 13:01 templates</code>
 
-
+</p>
 
 ### arquivo auth.conf
 
@@ -439,10 +439,12 @@ na seção [agent], mas prefira a configuração de DNS dentre as 3 opções.
 
 Quando instalamos o agente, ele nos traz o seguintes arquivos e diretórios dentro de /etc/puppet.
 
+<p>
 drwxr-xr-x 2 root root 4096 Aug 27 19:11 manifests
 drwxr-xr-x 2 root root 4096 Aug 27 19:11 modules
 -rw-r--r-- 1 root root  364 Aug 27 17:35 puppet.conf
 drwxr-xr-x 2 root root 4096 Aug 27 19:11 templates
+</p>
 
 Basicamente tem as mesmas funções descritas na estrutura do master, porém não são utilizadas no modo cliente/servidor uma vez que os agentes buscam as configurações no puppetmaster.
 
