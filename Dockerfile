@@ -10,13 +10,15 @@ RUN set -x; \
 
 ADD puppet.conf /etc/puppet/puppet.conf
 
-RUN mkdir -p /opt/puppet/etc /opt/puppet/var/log
+RUN mkdir /opt/puppet/
 
-VOLUME ["/opt/puppet"]
+RUN mkdir -p /opt/puppet/etc/ && mkdir -p /opt/puppet/var/log/
 
 RUN cp -rf /etc/puppet/* /opt/puppet/etc/
 
 RUN cp -rf /var/lib/puppet/* /opt/puppet/var/
+
+VOLUME ["/opt/puppet/etc" "/opt/puppet/var/" "/opt/puppet/var/log/"]
 
 EXPOSE 8140 
 
