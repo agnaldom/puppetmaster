@@ -9,17 +9,11 @@ RUN set -x; \
     && rm -rf /var/lib/apt/lists/*
 
 ADD puppet.conf /etc/puppet/puppet.conf
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
-RUN mkdir /opt/puppet/
-
-RUN mkdir -p /opt/puppet/etc/ && mkdir -p /opt/puppet/var/log/
-
-RUN cp -rf /etc/puppet/* /opt/puppet/etc/
-
-RUN cp -rf /var/lib/puppet/* /opt/puppet/var/
-
-VOLUME ["/opt/puppet/etc" "/opt/puppet/var/" "/opt/puppet/var/log/"]
+VOLUME ["/opt/puppet/etc", "/opt/puppet/var/", "/opt/puppet/var/log/"]
 
 EXPOSE 8140 
 
-ENTRYPOINT [ "/usr/bin/puppet", "master", "--no-daemonize", "--verbose" ]
+ENTRYPOINT ["/entrypoint.sh"]
